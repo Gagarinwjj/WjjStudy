@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>css精灵</title>
+    <script src="js/jquery-1.8.3.min.js"></script>
+    <style>
+        .icon
+        {
+            background-image: url(images/ui-icons_888888_256x240.png);
+            background-repeat: no-repeat;
+            height: 16px;
+            width: 16px;
+            float: left;
+            margin: 4px;
+            background-color: #ccc;
+        }
+
+            .icon:hover
+            {
+                background-image: url(images/ui-icons_454545_256x240.png);
+                 background-color: #b6ff00;
+            }
+
+        #test
+        {
+            width: 385px;
+            overflow: hidden;
+            margin: 50px;
+            border: dashed 1px #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div id="test"></div>
+    <script>
+        $(function () {
+            var icons = new Array();
+            var iconWidth = 16, iconHeight = 16, columns = 16, rows = 15;
+            for (var i = 0; i < rows; i++) {
+                for (var j = 0; j < columns; j++) {
+                    var position = -iconWidth * j + 'px ' + -iconWidth * i + 'px';
+                    icons.push('<div class="icon" style="background-position: ' + position + ';"></div>')
+                }
+            }
+            $('#test').html(icons.join(''));
+        });
+   
+    </script>
+</body>
+</html>

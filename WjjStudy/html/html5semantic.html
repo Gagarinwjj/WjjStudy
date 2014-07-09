@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>html5的标签</title>
+
+</head>
+<body>
+    <header>
+        <hgroup>
+            <h1>Header in h1</h1>
+            <h2>Subheader in h2</h2>
+        </hgroup>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#">Menu Option 1</a></li>
+            <li><a href="#">Menu Option 2</a></li>
+            <li><a href="#">Menu Option 3</a></li>
+        </ul>
+    </nav>
+    <section>
+        <article>
+            <header>
+                <h1>Article #1</h1>
+            </header>
+            <section>
+                This is the first article.  This is <mark>highlighted</mark>.
+                <canvas id="myCanvas">Your browser does not support the canvas tag.</canvas>
+                <script type="text/javascript">
+                    var canvas = document.getElementById('myCanvas');
+                    var ctx = canvas.getContext('2d');
+
+                    // Draw blue rectangle
+                    ctx.fillStyle = '#0065BD';
+                    ctx.fillRect(0, 0, 125, 75);
+
+                    // Draw white X
+                    ctx.beginPath();
+                    ctx.lineWidth = "15";
+                    ctx.strokeStyle = "white";
+                    ctx.moveTo(0, 0);
+                    ctx.lineTo(125, 75);
+                    ctx.moveTo(125, 0);
+                    ctx.lineTo(0, 75);
+                    //finish it
+                    ctx.stroke();
+
+                </script>
+            </section>
+        </article>
+        <article>
+            <header>
+                <h1>Article #2</h1>
+            </header>
+            <section>
+                This is the second article.  These articles could be blog posts, etc. 
+                <!--audio:controls autoplay src loop preload-->
+                <!--video:controls autoplay src loop preload,width height poster audio(只有muted)-->
+                <video width="320" height="240" controls="controls" poster="images/1.png">
+                    <source src="movie.ogg" type="video/ogg" />
+                    <source src="movie.mp4" type="video/mp4" />
+                    <source src="movie.webm" type="video/webm" />
+                    Your browser does not support the video tag.
+                </video>
+            </section>
+        </article>
+    </section>
+    <aside>
+        <section>
+            <h1>Links</h1>
+            <ul>
+                <li><a href="#">Link 1</a></li>
+                <li><a href="#">Link 2</a></li>
+                <li><a href="#">Link 3</a></li>
+            </ul>
+        </section>
+        <figure>
+            <img width="85" height="85"
+                src="http://www.windowsdevbootcamp.com/Images/JennMar.jpg"
+                alt="Jennifer Marsman" />
+            <figcaption>Jennifer Marsman</figcaption>
+        </figure>
+    </aside>
+    <footer>Footer - Copyright 2011</footer>
+</body>
+</html>

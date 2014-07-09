@@ -1,0 +1,225 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+	<link rel="icon" href="favicon.ico" type="image/x-icon" />
+	<link href="css/animation.css" rel="stylesheet" />
+	<script src="js/jquery-1.8.3.js"></script>
+	<title>jqmobile的动画css</title>
+	<script>
+		// 让不支持CSS3 animation的浏览器向下兼容效果
+		var BROWSER = (function () {
+			var ua = navigator.userAgent.toLowerCase();
+			console.log("userAgent: " + ua);
+			var match = /(webkit)[ \/]([\w.]+)/.exec(ua) ||
+				/(opera)(?:.*version)?[ \/]([\w.]+)/.exec(ua) ||
+				/(msie) ([\w.]+)/.exec(ua) ||
+				(!/compatible/.test(ua) && /(mozilla)(?:.*? rv:([\w.]+))?/.exec(ua)) ||
+				[];
+			console.log("match: " + match);
+			return { browser: match[1] || "", version: match[2] || "0" };
+			//Chrome
+			//userAgent: mozilla/5.0 (windows nt 6.1) applewebkit/537.36 (khtml, like gecko) chrome/34.0.1847.131 safari/537.36 
+			//match: webkit/537.36, webkit, 537.36
+
+			//FireFox
+			// userAgent: mozilla/5.0 (windows nt 6.1; rv:29.0) gecko/20100101 firefox/29.0
+			//match: mozilla/5.0 (windows nt 6.1; rv:29.0,mozilla,29.0
+
+			//IE
+			//userAgent: mozilla/5.0 (compatible; msie 9.0; windows nt 6.1; trident/5.0; slcc2; .net clr 2.0.50727; .net clr 3.5.30729; .net clr 3.0.30729; media center pc 6.0; infopath.3; .net4.0c; .net4.0e) 
+			// match: msie 9.0,msie,9.0 
+
+
+			//Opera
+			//userAgent: mozilla/5.0 (windows nt 6.1) applewebkit/537.36 (khtml, like gecko) chrome/34.0.1847.132 safari/537.36 opr/21.0.1432.57 (edition campaign 49) 
+			//match: webkit/537.36,webkit,537.36 
+
+		})();
+
+		if ((BROWSER.animate = (BROWSER.browser !== "mozilla" && BROWSER.browser !== "webkit"))) {
+			// 不是目标浏览器(即为IE)，创建CSS向下兼容
+			var oStyle = document.createElement("style"), cssText = ".out{display:none!important;}";
+			oStyle.type = "text/css";
+			if (BROWSER.browser === "msie") {
+				oStyle.styleSheet.cssText = cssText;
+			} else {
+				oStyle.innerHTML = cssText;
+			}
+			console.log("oStyle: " + oStyle.styleSheet.cssText);
+			//IE下
+			// oStyle: .out {
+			//display: none !important;
+			//}
+			document.getElementsByTagName("head")[0].appendChild(oStyle);
+		}
+	</script>
+	<style>
+		*
+		{
+			margin: 0;
+			padding: 0;
+		}
+
+		body
+		{
+			font-family: 'Microsoft YaHei';
+			font-size: 18px;
+		}
+
+		.box
+		{
+			width: 500px;
+			height: 400px;
+			margin-left: auto;
+			margin-right: auto;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.list, .index
+		{
+			position: absolute;
+		}
+
+		.index
+		{
+			right: 0px;
+			bottom: 0px;
+		}
+
+			.index i
+			{
+				display: inline-block;
+				width: 12px;
+				height: 12px;
+				margin-right: 5px;
+				border-radius: 12px;
+				background-color: #666;
+				background-color: rgba(0,0,0,.6);
+			}
+
+			.index .on
+			{
+				background-color: #cd0000;
+				background-color: rgba(255,0,0,.75);
+			}
+	</style>
+</head>
+<body>
+	<script>
+		function yun() {
+			//1、先算&&再算||
+			//2、false&&any均为false
+			//3、true||any 均为true
+			//4、true&&有效对象 为有效对象
+			//5、false||有效对象 为有效对象
+			//结论：结果为决定因子
+			document.write(false && false);//false
+			document.write("<br/>");
+			document.write(false && true);//false
+			document.write("<br/>");
+			document.write(true || false);//true
+			document.write("<br/>");
+			document.write(true || true);//true
+			document.write("<br/>");
+			document.write(false && [1, 3]);//false
+			document.write("<br/>");
+			document.write(false && [1, 3] || [3, 4]);//[3,4]
+			document.write("<br/>");
+			document.write(true && [1, 3]);//[1,3]
+			document.write("<br/>");
+			document.write([1, 3] && true);//true!
+			document.write("<br/>");
+			document.write(false || [1, 3]);//[1,3]
+			document.write("<br/>");
+			document.write([1, 3] || false);//[1,3]
+			document.write("<br/>");
+			document.write(true || [1, 3] || [3, 4]);//true
+			document.write("<br/>");
+			document.write([3, 4] || false && [1, 3]);//[3,4]
+			document.write("<br/>");
+			document.write([3, 4] || true && [1, 3]);//[3,4]
+		}
+	</script>
+	<h1>动画的2中方式(HTML+CSS+JS)：</h1>
+	<p>
+		1、js直接操作dom的样式属性<br />
+		2、写好动画css，js切换dom的样式
+	</p>
+
+	<div id="box" class="box">
+		<a href="/" class="list  in">
+			<img src="http://image.zhangxinxu.com/image/study/p/s500/ps1.jpg" /></a>
+		<a href="/" class="list  out">
+			<img src="http://image.zhangxinxu.com/image/study/p/s500/ps2.jpg" /></a>
+		<a href="/" class="list  out">
+			<img src="http://image.zhangxinxu.com/image/study/p/s500/ps3.jpg" /></a>
+		<a href="/" class="list  out">
+			<img src="http://image.zhangxinxu.com/image/study/p/s500/ps4.jpg" /></a>
+		<div id="index" class="index"></div>
+	</div>
+	<script>
+		//初始化效果
+		$(".box .list").each(function () {
+			$(this).addClass("slide");//fade, pop, slide, slidefade, slidedown, slideup, flip, turn, flow
+		});
+		//2个对象 导航点和元素列表
+		var eleIndex = $("#index"), eleList = $("#box .list");
+		//产生导航点
+		var navIndex = function () {
+			var htmlIndex = '';
+			eleList.each(function () {
+				if ($(this).hasClass("out")) {
+					htmlIndex += '<i></i>';
+				} else {
+					htmlIndex += '<i class="on"></i>';
+				}
+			});
+			eleIndex.html(htmlIndex);
+		};
+
+		var indexElement = -1, eleSlideIn = null;
+		//$("#box").bind("click", function () {
+		//    indexElement++;
+		//    if (indexElement >= eleList.length) {
+		//        indexElement = 0;
+		//    }
+		//    //if (eleSlideIn != null) {
+		//    //    eleSlideIn.removeClass("in").addClass("out");//移除当前对象
+		//    //}
+		//    //优化脚本，晦涩
+		//    eleSlideIn && eleSlideIn.removeClass("in").addClass("out");
+		//    eleSlideIn = $(eleList.get(indexElement)).removeClass("out").addClass("in");
+		//    navIndex();
+		//    return false;
+		//}).trigger("click");
+
+		navIndex();
+		$(".index i").hover(function () {
+			var clickIndex = $(this).index();
+			var oldIndex = 0;
+			//移出去
+			eleList.each(function () {
+				//$(this).removeClass("in").addClass("out");//一股脑 全部重置
+				if ($(this).hasClass("in")) {
+					$(this).removeClass("in").addClass("out");
+					oldIndex = $(this).index();
+					//if (oldIndex < clickIndex) {
+					//    $(this).addClass("reverse");
+					//} else {
+					//    $(this).removeClass("reverse");
+					//}
+				}
+			});
+			//移进来
+			$(eleList.get(clickIndex)).removeClass("out").addClass("in");
+			//navIndex();重新生成导致绑定的click事件失效。
+			$(".index i").removeClass("on");
+			$(this).addClass("on");
+			
+		});
+	</script>
+</body>
+</html>

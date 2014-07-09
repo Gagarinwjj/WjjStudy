@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <link href="css/taobaoinit.css" rel="stylesheet" />
+    <style>
+        p
+        {
+            width: 400px;
+            font-size: 20px;
+            line-height: 2;
+            vertical-align: top;
+        }
+
+            p span
+            {
+                font-size: 40px;
+            }
+
+        .parent
+        {
+            width: 250px;
+            height: 200px;
+            line-height: 200px; /*1、设置父盒子line-height，height可以不设置，如果设置则要等于line-height*/
+            background-color: #ccc;
+            font-size: 0;
+        }
+
+        .child
+        {
+            display: inline-block; /*2、子盒子需要inline-block化*/
+            font-size: 15px;
+            line-height: 1.4em;
+            vertical-align: middle; /*3、垂直居中*/
+        }
+    </style>
+</head>
+<body>
+    <p>字高20px，行高1em，当文本为多行时可能会发生文字重叠的现象。<span>字高30px。</span></p>
+
+    <h2>div中元素垂直居中</h2>
+    <div class="parent">
+        <span class="child">This is a test.<br />
+            This is a test.
+        </span>
+        <span class="child">This is a test.<br />
+            This is a test.
+        </span>
+    </div>
+</body>
+</html>

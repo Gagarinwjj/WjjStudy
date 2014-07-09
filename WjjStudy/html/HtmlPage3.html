@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <title>absolute绝对定位的破坏性</title>
+    <style>
+        body
+        {
+            font-family: 'Microsoft YaHei';
+            font-size: 18px;
+        }
+
+        .div
+        {
+            padding: 10px;
+            margin: 5px;
+            border: 8px solid #ffd800;
+            background-color: #f0f3f9;
+            float: left;
+        }
+
+        .abs
+        {
+            position: absolute;
+            /*没有翅膀是飞不走的,待在原位*/
+            /*
+              1、取消注释，插上翅膀，则会以body为参考物作left:0 top:0 位移
+              2、FireBug禁用翅膀，取消位移，回到原位！
+            */
+            /*left: 0px;
+            top: 0px;*/
+        }
+
+        .info
+        {
+            border-width: 8px 0 0;
+            border-radius: 8px 8px 0 0;
+            border-color: blue;
+            top: auto; /*复写abs以清空*/
+            left: 10px; /*复写abs以重置*/
+            bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="div">
+        <img src="http://image.zhangxinxu.com/image/study/s/s256/mm1.jpg" />
+        <p>图片无absolute</p>
+    </div>
+    <div class="div">
+        <img class="abs" src="http://image.zhangxinxu.com/image/study/s/s256/mm1.jpg" />
+        <p>
+            图片absolute后,absolute的参考物，为啥没有追溯到body，而是在本div中？<br />
+            因为没有指定left/top！没有翅膀是飞不走的！<br />
+            事实上参考物的确为body，只不过没有飞走！<br />
+            依然保持原位，貌似还在div中。
+        </p>
+    </div>
+    <div class="div abs info">
+        <p>说明：图片设置position:absolute属性后，父标签的高宽都塌陷了，连它的兄弟float都救不了。</p>
+
+    </div>
+</body>
+</html>

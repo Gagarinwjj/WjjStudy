@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>js模板引擎</title>
+    <script>
+        // Simple JavaScript Templating
+        // John Resig - http://ejohn.org/ - MIT Licensed
+        (function () {
+            var cache = {};//???
+
+            this.tmpl = function tmpl(str, data) {
+                // Figure out if we're getting a template, or if we need to
+                // load the template - and be sure to cache the result.
+                var fn = !/\W/.test(str) ?
+                  cache[str] = cache[str] ||
+                    tmpl(document.getElementById(str).innerHTML) :
+
+                  // Generate a reusable function that will serve as a template
+                  // generator (and which will be cached).
+                  new Function("obj",
+                    "var p=[],print=function(){p.push.apply(p,arguments);};" +
+
+                    // Introduce the data as local variables using with(){}
+                    "with(obj){p.push('" +
+
+                    // Convert the template into pure JavaScript
+                    str
+                      .replace(/[\r\t\n]/g, " ")
+                      .replace(/<!--.*?-->/g, "")//去除注释
+                      .split("<%").join("\t")
+                      .replace(/((^|%>)[^\t]*)'/g, "$1\r")
+                      .replace(/\t=(.*?)%>/g, "',$1,'")
+                      .split("\t").join("');")
+                      .split("%>").join("p.push('")
+                      .split("\r").join("\\'")
+                  + "');}return p.join('');");
+
+                // Provide some basic currying to the user
+                return data ? fn(data) : fn;
+            };
+        })();
+
+        function what(obj) {
+            var p = [],
+                print = function () {
+                    p.push.apply(p, arguments);//???
+                };
+            with (obj) {
+                p.push("function_body");
+            }
+            return p.join("");
+        };
+        //优化版本
+        (function () {
+            var cache = {};
+            this.tmplpro = function (str, data) {
+                var fn = !/\s/.test(str) ?
+                    cache[str] = cache[str] || tmplpro(document.getElementById(str).innerHTML) :
+                new Function("obj", "var p='';p+='"
+                    + str.replace(/[\r\n\t]/g, " ")
+                    .split('\\').join("\\\\")
+                    .split("<%").join("\t")
+                    .replace(/<!--.*?-->/g, "")//去除注释
+                    .replace(/((^|%>)[^\t]*)'/g, "$1\r")
+                    .replace(/\t=(.*?)%>/g, "'+$1+'")
+                    .split("\t").join("';")
+                    .split("%>").join("p+='")
+                    .split("\r").join("\\'")
+                    + "';return p;");
+                console.log(str);//元素id或则functionBody
+                return data ? fn.call(data) : fn;//data有效 ? 返回模板解析后的html : 返回预编译的fn。
+            }
+        })();
+    </script>
+</head>
+<body>
+    <!--展示区域-->
+    <div id="results"></div>
+
+    <!--模板代码-->
+    <script type="text/html" id="user_tmpl">
+        <ul>
+            <!--1、普通文本xxx，原文push(xxx)-->
+            <% for ( var i = 0; i < users.length; i++ ) { %><!--2、<%xxx%>之间原文输出xxx-->
+            <li><a href="<%=users[i].url%>"><%=users[i].name%></a></li>
+            <!--3、<%=xxx%>之间原文push(xxx)-->
+            <% } %>
+        </ul>
+    </script>
+
+    <!--手动拼凑-->
+    <script>
+        //var fn1 = new Function("obj", result);相当于以下脚本
+        //1、数组拼凑
+        function fn1(users) {
+            var p = [];
+            with (users) {
+                p.push('<ul>');//1
+                for (var i = 0; i < users.length; i++) {//2
+                    p.push('<li><a href="');//1
+                    p.push(users[i].url);//3
+                    p.push('">');//1
+                    p.push(users[i].name);//3
+                    p.push('</a></li>');//1
+                }//2
+                p.push('</ul>');//1
+            }
+            return p.join('');
+        }
+        var users1 = [
+         { "name": "Byron1", "url": "http://localhost" },
+         { "name": "Casper2", "url": "http://localhost" },
+         { "name": "Frank3", "url": "http://localhost" }
+        ];
+        console.log("手动拼凑1: " + fn1(users1));
+
+        //2、当然也可以字符串拼凑
+        var html = '<ul>';
+        for (var i = 0; i < users1.length; i++) {
+            html += '<li><a href="' + users1[i].url + '">' + users1[i].name + '</a></li>';
+        }
+        html += '</ul>';
+        console.log("手动拼凑2: " + html);
+
+    </script>
+
+    <!--模板引擎-->
+    <script type="text/javascript">
+        var users = [
+            { "name": "Byron1", "url": "http://localhost" },
+            { "name": "Casper2", "url": "http://localhost" },
+            { "name": "Frank3", "url": "http://localhost" }
+        ];
+
+        function mytmpl(id, data) {
+            var html = document.getElementById(id).innerHTML;
+            var result = "var p=[];with(obj){p.push('"
+                + html
+                .replace(/[\r\n\t]/g, " ")//替换特殊字符
+                .replace(/<!--.*?-->/g, "")//去除注释
+                .replace(/<%=(.*?)%>/g, "');p.push($1);p.push('")//固定替换
+                .replace(/<%/g, "');")//固定替换
+                .replace(/%>/g, "p.push('")//固定替换
+                .replace(/\s{2,}/g, "")//去除较大空格
+                + "');}return p.join('');";
+            var fn = new Function("obj", result);
+            console.log("functionBody: " + result);
+            return fn(data);
+        }
+
+        var results = document.getElementById("results");
+        results.innerHTML = mytmpl("user_tmpl", users);//原始版本。mytmpl(模板id，数据)=>html，即分离了样式和数据
+
+        console.log("John Resig: " + tmpl("user_tmpl", users));//大神版本
+        console.log("tmplpro1:" + tmplpro("user_tmpl", users));//优化版本
+        console.log("tmplpro2:" + tmplpro("user_tmpl", users));//直接用缓存的fn
+    </script>
+
+</body>
+</html>

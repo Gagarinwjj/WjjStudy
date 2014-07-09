@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>jQuery选择器</title>
+    <script src="../js/jquery-1.8.3.min.js"></script>
+
+    <script>
+        $(function () {
+            console.log($("input").length);//标签选择器 匹配所有 input
+            console.log($(":input").length);//表单选择器 匹配所有 input, textarea, select 和 button 元素
+            console.log($("input[type='image']").length);//标签选择器+属性过滤
+            console.log($(":image").length);//表单选择器，是上面的简写
+
+            $.each([0, 1, 2], function (i, n) {
+                console.log(i + " : " + n);
+            });
+
+            $.each({ name: "John", lang: "JS", fds: "fdf" }, function (i, n) {
+                console.log(i + " : " + n);
+            });
+
+            $("#bb").click(function () {
+
+                $("div").each(function (index, domEle) {
+                    // domEle == this 
+                    $(domEle).css("backgroundColor", "yellow");
+                    if ($(this).is("#stop")) {
+                        $("span").text("Stopped at div index #" + index);
+                        return false;
+                    }
+                });
+            });
+
+            console.log($("input"));//jQuery Set
+            console.log($("input").get());//Dom Set
+
+            $("span").parents("div").each(function () {
+                console.log($(this).html());
+            });
+
+            $(".inner").wrapAll("<div class='new' />");//找到第一个.inner,加一个盒子，其他的匹配依次移进来
+            $("span").unwrap();//body内部，如果span有父，则只剥离一层
+
+
+            $('form').animate({
+                "width": "300px",
+                "height": "300px",
+                "opacity": "1"
+            });
+
+            //$("#ani").show("slow");
+            //$("#ani").animate({ left: '+=200' }, 2000);
+            //$("#ani").queue(function () {
+            //    $(this).addClass("newcolor");
+            //    $(this).dequeue();
+            //});
+            //$("#ani").animate({ left: '-=200' }, 500);
+            //$("#ani").queue(function () {
+            //    $(this).removeClass("newcolor");
+            //    $(this).dequeue();
+            //});
+            //$("#ani").slideUp();
+            $("#ani").animate({
+                width: "toggle",
+                height: "toggle"
+            }, {
+                duration: 5000,
+                //specialEasing: {
+                //    width: "linear",
+                //    height: "easeOutBounce"
+                //},
+                complete: function () {
+                    $(this).after("<div>Animation complete.</div>");
+                }
+            });
+
+        });
+
+    </script>
+    <style>
+        #ani
+        {
+            width: 300px;
+            height: 300px;
+            background-color: #ffd800;
+        }
+    </style>
+</head>
+<body>
+    <form>
+        <input type="button" value="Input Button" />
+        <input type="checkbox" />
+
+        <input type="file" />
+        <input type="hidden" />
+        <input type="image" />
+
+        <input type="password" />
+        <input type="radio" />
+        <input type="reset" />
+
+        <input type="submit" />
+        <input type="text" />
+        <select>
+            <option>Option</option>
+        </select>
+
+        <textarea></textarea>
+        <button>Button</button>
+
+    </form>
+    <a target="_blank" href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=hre2srO1v7_0sbXG9-eo5enr" style="text-decoration: none;">
+        <img src="http://rescdn.qqmail.com/zh_CN/htmledition/images/function/qm_open/ico_mailme_02.png" /></a>
+    <button id="bb">Change colors</button>
+    <span>1</span>
+    <div>1</div>
+    <div>1</div>
+
+    <div>1</div>
+    <div>1</div>
+    <div id="stop">Stop here</div>
+    <div>1</div>
+
+    <div>1</div>
+    <div>1</div>
+
+    <div id="ani">
+        <p>
+
+            <span>Hello</span>
+
+        </p>
+        <div>
+            <div>
+                <span>Hello Again</span>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="inner">gaga</div>
+    <div class="inner">wfee</div>
+    <div class="efe">
+        <div class="inner">H32ello</div>
+        <div class="inner">2344</div>
+        <div class="inner">1111</div>
+    </div>
+    <div class="container">
+        <div class="inner">Hello</div>
+        <div class="inner">Goodbye</div>
+    </div>
+</body>
+</html>

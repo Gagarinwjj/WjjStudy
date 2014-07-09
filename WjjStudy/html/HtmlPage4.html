@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <title>父盒子限魔大法</title>
+    <style>
+        body
+        {
+            font-family: 'Microsoft YaHei';
+            font-size: 18px;
+        }
+
+
+        .box
+        {
+            width: 15em;
+            height: 10em;
+            background-color: #beceeb;
+            position: relative; /*父盒子限魔大法,父盒子真身还在文档流，纵云梯z-index飙升*/
+            /*position: absolute;*/ /*父盒子限魔大法，父盒子真身不在文档流，没有了宽和高，纵云梯z-index飙升*/
+            left: 100px;
+            top: 100px;
+        }
+
+            .box img
+            {
+                position: absolute; /*向上追溯absolute或relative，直至body*/
+                left: 20px;
+                top: 20px;
+            }
+    </style>
+</head>
+<body>
+    <div>
+        <p>说明：限制absolute以body为参考物，约束在拥有ablolute或relative属性的父容器</p>
+    </div>
+    <div id="target" class="box">
+        <img src="http://image.zhangxinxu.com/image/study/s/s128/mm3.jpg" />
+    </div>
+
+</body>
+</html>

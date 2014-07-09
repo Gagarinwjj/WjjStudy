@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="description" content="CSS在线压缩工具，精简CSS文件大小，提高web前端性能" />
+    <meta name="description" content="CSS在线压缩工具，精简CSS文件大小，提高web前端性能" />
+    <meta name="keywords" content="张鑫旭,张鑫旭-鑫空间-鑫生活,web前端,css,CSS压缩" />
+    <meta name="author" content="张鑫旭,zhangxixnu" />
+    <title>CSS在线压缩工具</title>
+    <link rel="stylesheet" href="../css/compress.css" type="text/css" />
+</head>
+
+<body>
+    <div id="header">
+        <a href="http://www.zhangxinxu.com/" class="logo" title="回到鑫空间-鑫生活首页">
+            <img src="http://www.zhangxinxu.com/php/image/zxx_home_logo.png" border="0" />
+        </a>
+    </div>
+    <div id="main">
+        <h1>CSS在线压缩工具</h1>
+        <div id="body">
+            <div class="old_code">
+                <h3>原始代码</h3>
+                <div class="sm_tit">将CSS代码复制到下面的文本域中：</div>
+                <textarea id="oldCode" class="textarea"></textarea>
+            </div>
+            <div class="compress_process">
+                <h3>处理过程</h3>
+                <div class="g9 prc_x">
+                    <div class="mb10">
+                        <button id="startBtn" class="start_btn">开始处理</button>
+                        <a href="http://www.zhangxinxu.com/php/advise.php">bug提交</a>
+                    </div>
+                    <div id="first">1. 去除注释</div>
+                    <div id="second">2. 去除样式首{尾}前后空白符</div>
+                    <div id="third">3. 去除分号;前后空白符</div>
+                    <div id="forth">4. 去除冒号:前后空白符</div>
+                    <div id="fifth">5. 去除换行符（空白符）</div>
+                    <div id="sixth">6. 去除末尾最后一个分号</div>
+                    <div id="seventh">7. IE6 first-letter留空</div>
+                </div>
+                <div id="saveSize" class="prc_x">
+                </div>
+            </div>
+            <div class="now_code">
+                <h3>处理结果</h3>
+                <div class="sm_tit">处理后的CSS代码如下：</div>
+                <textarea id="showCode" class="textarea"></textarea>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var $ = function (id) {
+            return document.getElementById(id);
+        };
+        var v_new;
+        $("startBtn").onclick = function () {
+            var v_old = $("oldCode").value;//, v_new;//定义全局，便于输出
+            var l = v_old.length;
+            if (l === 0) {
+                alert("尚未添加CSS代码");
+                return false;
+            }
+            //this.disabled = "disabled";
+            //开始执行压缩
+            console.log("原始内容：" + v_old);
+
+            //去除注释
+            //v_new = v_old.replace(/\/\*((.|\n|\t)*?)\*\//g, "");//去除强转符号：/*((.|\n|\t)*?)*/ wjj：/*(.|\s)*?*/
+            v_new = v_old.replace(/\/\*(.|\t|\n)*\*\//g, "");//bywjj。\t\n是为了能替换掉有换行的注释。不能换成\s，否则报错(但是在线测试是可以的)?难道\s匹配得太多了？空白符是指空格符' '、水平制表符'\t'、垂直制表符'\v'、换行符'\n'、回车符'\r'之类的字符。
+            fnProcess("first");
+            //除去首{尾}前后空白符  
+            v_new = v_new.replace(/\s*{\s*/g, "{").replace(/\s*}\s*/g, "}");
+            fnProcess("second");
+            //去除分号;前后空白符
+            v_new = v_new.replace(/\s*;\s*/g, ";");
+            fnProcess("third");
+            //去除冒号:前后空白符
+            v_new = v_new.replace(/\s*:\s*/g, ":");
+            fnProcess("forth");
+            //去除换行符(空白符)
+            //v_new = v_new.replace(/(\t|\n)+/g, "");//\t|\n无效果，换成\s后，会将 padding:2px 4px 换成 padding:2px4px
+            v_new = v_new.replace(/^\s+/g, "");//bywjj 去除空白符
+            fnProcess("fifth");
+            //去除末尾最后一个分号
+            v_new = v_new.replace(/;}/g, "}");
+            fnProcess("sixth");
+            //IE6下css-letter留空的问题
+            if (/first\-letter{/g.test(v_new)) {
+                v_new = v_new.replace(/first\-letter{/g, "first-letter {");
+                fnProcess("seventh");
+            } else {
+                $("seventh").style.color = "#999";
+                if ($("seventh").getElementsByTagName("strong").length > 0) {
+                    $("seventh").removeChild($("seventh").getElementsByTagName("strong")[0]);
+                }
+            }
+            var nl = v_new.length;
+            var savel = l - nl;
+            $("saveSize").innerHTML = '原CSS文件大小大约' + fnKbyte(l) + 'K<br />现大小大约' + fnKbyte(nl) + 'K<br />节约大小约<span style="color:red;">' + fnKbyte(savel) + 'K</span>';
+            $("showCode").value = v_new;
+        };
+        var fnProcess = function (id) {
+            if ($(id).getElementsByTagName("strong").length === 0) {
+                $(id).style.color = "#333";
+                var spanNode = document.createElement("strong");
+                spanNode.style.color = "green";
+                spanNode.innerHTML = "√";
+                $(id).appendChild(spanNode);
+            }
+            console.log($(id).innerText || $(id).textContent + ":" + v_new);//火狐下Dom的prop不是innerText 而是textContent
+        };
+        var fnKbyte = function (l) {
+            var k = l / 1024;
+            return Math.round(k * 1000) / 1000;
+        };
+
+        //一些初始化
+        $("oldCode").focus();
+        $("showCode").value = "";
+        //$("startBtn").disabled = "";
+    </script>
+
+</body>
+</html>

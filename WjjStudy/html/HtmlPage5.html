@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <title>relative最小影响原则（不遵循）</title>
+    <style>
+        body
+        {
+            font-family: 'Microsoft YaHei';
+            font-size: 18px;
+        }
+
+        .test
+        {
+            width: 25em;
+            margin: 2em auto;
+        }
+
+        .box
+        {
+            padding: 2em;
+            border: 1px solid #beceeb;
+            border-radius: 2px;
+            background-color: #f0f3f9;
+            position: relative;
+        }
+
+        .ok
+        {
+            color: green;
+            font-size: 6em;
+            position: absolute;
+            right: -11px;
+            bottom: -.5em;
+        }
+
+        .infodiv
+        {
+            background-color: #f0f3f9;
+            margin: 5px auto;
+            width: 800px;
+        }
+
+        .infoborder
+        {
+            /*position: absolute;*/ /*inline-block化,但是没有自然居中，即需要其他辅助居中*/
+            border-style: solid;
+            border-width: 8px 0 0;
+            border-radius: 8px 8px 0 0;
+            border-color: blue;
+        }
+    </style>
+</head>
+<body>
+    <div class="test">
+        <div class="box">
+            CSS relative相对定位的最小化影响原则
+        <strong class="ok">√</strong>
+        </div>
+    </div>
+
+    <div class="infodiv infoborder">
+        <p>
+            将需要绝对定位的元素单独放在relative属性的标签下，于是，<br />
+            relative相对定位就不会影响任何其他元素，仅仅是其内部的绝对定位元素。<br />
+            于是，上面的文字内容div还是那个普普通通的文字内容div，<br />
+            以后要改动什么东西就可以放心大胆的改，而不需要担心扔掉那个属性或是布局变了,<br />
+            里面原来绝对定位的元素位置偏移掉了。<br />
+            也就是牺牲一个标签增强扩展性和易维护性！
+        </p>
+    </div>
+
+</body>
+</html>

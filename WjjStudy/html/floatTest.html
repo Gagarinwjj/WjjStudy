@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <title></title>
+    <style>
+        *
+        {
+            margin: 0;
+            padding: 0;
+        }
+
+        body
+        {
+            font-family: 'Microsoft YaHei';
+            font-size: 18px;
+        }
+
+        .ul
+        {
+            width: 600px;
+            border: 4px solid #a0b3d6;
+            list-style: none;
+        }
+
+        .li
+        {
+            border: 4px solid #ff6633;
+            background: #ffd800;
+        }
+
+        .fl
+        {
+            float: left;
+        }
+        /*通过absolute 模拟float:left,区别在于:
+        absolute脱离了文档流，造成重叠
+        float:left没有脱离文档流，没有重叠*/
+        .absfl
+        {
+            position: absolute; /*渲染步奏，step1：脱离文档流；step2：inlin-block化；step3：宽高包裹内部，否则为0*/
+            left: 20px;
+        }
+        /*首选方法：zoom+after*/
+        /*after代表 【应用该样式的元素内部最后一个子元素】 的后面添加内容，而不是【应用该样式的元素】后面
+           以下是浮动不可或缺的5要素！
+           缺一不可！
+           证明：FireBug调试时，禁用任意一个属性都打不到清除浮动效果！！
+            */
+        .clear
+        {
+            zoom: 1; /*解决IE6/IE7下的清除浮动*/
+        }
+
+            .clear:after
+            {
+                display: block; /*1、block是清除浮动的前提:将float造成的高度塌陷修改成包裹内容！*/
+                content: "clear:after...whatever"; /*2、一定要有内容，可以是任意内容，这样才有东西包裹*/
+                clear: both; /*3、content的内容在渲染时候避开浮动区域，避免重叠，这样可以撑起容器高度*/
+                height: 0; /*4、不占用宝贵空间*/
+                visibility: hidden; /*5、隐藏content内容*/
+            }
+        /*次选方法：zoom+overflow ，margin负值定位或是负的绝对定位，超出边界会被截取*/
+        .clear2
+        {
+            overflow: hidden;
+            zoom: 1; /*解决ie下的浮动，margin重叠等一些问题。*/
+        }
+
+        /*图片垂直方向居中*/
+        .pic_box
+        {
+            width: 500px;
+            height: 400px;
+            background-color: #beceeb;
+            font-size: 0;
+            *font-size: 200px;
+            text-align: center;
+        }
+
+            .pic_box img
+            {
+                vertical-align: middle;
+            }
+
+            .pic_box:after
+            {
+                display: inline-block;
+                width: 0;
+                height: 100%;
+                content: "center";
+                vertical-align: middle;
+                overflow: hidden;
+            }
+    </style>
+</head>
+<body>
+    <ul class="ul clear">
+        <li class="li fl">
+            <img src="wjj.png" /></li>
+        <li class="li fl">
+            <img src="wjj.png" /></li>
+    </ul>
+    <!--不推荐方法：懒汉法，浪费一个标签，且只能使用一次，如果有字符（比如空格、文字等），还会有一段空白。当然如果你需要这个空白，你可以加上一个空格-->
+    <div style="clear: both;"></div>
+    <br />
+    <div class="pic_box">
+        <img src="http://images.cnblogs.com/cnblogs_com/gagarinwjj/567426/o_wjj.png" />
+    </div>
+    <div style="letter-spacing:-5px;">
+        <img src="http://image.zhangxinxu.com/image/study/s/s128/mm1.jpg" />
+        <img src="http://image.zhangxinxu.com/image/study/s/s128/mm2.jpg" />
+        <p>标签与标签之间的换行 会产生间隙</p>
+    </div>
+</body>
+</html>

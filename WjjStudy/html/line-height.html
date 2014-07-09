@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <title></title>
+    <style>
+        *
+        {
+            margin: 0;
+            padding: 0;
+        }
+
+        body
+        {
+            font-family: 'Microsoft YaHei';
+            font-size: 18px;
+        }
+
+        .test1
+        {
+            font-size: 20px;
+            line-height: 0;
+            border: 1px solid #cccccc;
+            background: #eeeeee;
+        }
+
+        .test2
+        {
+            font-size: 0;
+            line-height: 20px;
+            border: 1px solid #cccccc;
+            background: #eeeeee;
+        }
+
+        .test3
+        {
+            font-size: 20px;
+            line-height: 40px;
+            border: 1px solid #cccccc;
+            background: #eeeeee;
+        }
+
+
+
+        .info
+        {
+            padding: 10px;
+            margin: 5px;
+            background-color: #f0f3f9;
+            border-style: solid;
+            border-width: 8px 0 0;
+            border-radius: 8px 8px 0 0;
+            border-color: blue;
+            position: absolute;
+            right: 10px; /*复写abs以重置*/
+            bottom: 10px;
+        }
+
+        .mulit_line
+        {
+            line-height: 88px;
+            border: 1px solid blue;
+            padding-left: 5px;
+            margin-top: 5px;
+        }
+
+            .mulit_line span
+            {
+                display: inline-block;
+                line-height: 1.4em;
+                vertical-align: middle;
+            }
+    </style>
+</head>
+<body>
+    <br />
+    <div class="test1">测试1,看到字，无行高</div>
+    <br />
+    <div class="test2">测试2,看不到字，有行高</div>
+    <br />
+    <div class="test3">测试3,有font-size和line-height,单行默认垂直居中</div>
+    <br />
+    <div class="test3">
+        测试3,有font-size和line-height,单行默认垂直居中<br />
+        测试3,有font-size和line-height,单行默认垂直居中<br />
+        测试3,有font-size和line-height,单行默认垂直居中<br />
+        测试3,有font-size和line-height,单行默认垂直居中<br />
+    </div>
+
+    <p class="mulit_line">
+        <span style="font-size: 12px;">这里是高度为150像素的标签内的多行文字，文字大小为12像素。<br />
+            这里是第二行，用来测试多行的显示效果。
+        </span>
+    </p>
+
+    <div class="info">
+        <p>
+            test1 div有文字大小，但行高为0，结果div的高度就是个0；<br />
+            test2 div文字大小为0，但是有行高，为20像素，结果div高度就是20像素。<br />
+            这就说明撑开div高度的是line-height不是文字内容。<br />
+            test3说明，只要line-height>=font-size,默认垂直居中。(line-height减去font-size)/2=字体间距，如果字体间距<0则多行文字会有重叠。比如（10px-20px）/2=-5px;
+        </p>
+    </div>
+
+</body>
+</html>

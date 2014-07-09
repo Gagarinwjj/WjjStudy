@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>str.match(regex)与regex.exec(str)</title>
+    <script type="text/javascript">
+        str = "xxabbb34eftab0modabb6";
+        var regex = /a(b+)(\d+)/g;
+        var arr;
+        while ((arr = regex.exec(str)) != null) {
+            document.write("arr.length=" + arr.length + "<br/>");
+            for (var i = 0; i < arr.length; i++) {
+                document.write(i + ":" + arr[i] + "<br/>");
+            }
+            document.write("<br/>");
+        }
+
+        var re1 = /.*bbb/g;//贪婪
+        var re2 = /.*?bbb/g;//惰性
+        var result;
+        //debugger;
+        //  var re3 = /.*+bbb/g;//支配性,javascript不支持，IE与所有最新的标准浏览器都报错
+        result = re1.test("abbbaabbbaaabbbb1234");//true 匹配abbbaabbbaaabbb 
+        re1.lastIndex = 0;//test会更改lastIndex，导致没有重头匹配
+        result = re1.exec("abbbaabbbaaabbbb1234");//匹配 abbbaabbbaaabbb
+        result = "abbbaabbbaaabbbb1234".match(re1);//匹配 abbbaabbbaaabbbb
+
+        result = re2.test("abbbaabbbaaabbbb1234");//true
+        re2.lastIndex = 0;//test会更改lastIndex，导致没有重头匹配
+        result = re2.exec("abbbaabbbaaabbbb1234");//匹配 abbb
+        result = "abbbaabbbaaabbbb1234".match(re2);//匹配 abbb,aabbb,aaabbb
+
+        console.log('1500000234223330'.replace(/(?=(\d{3})+$)/g, ','));//或者/(?=(?:\d{3})+$)/g 精妙！
+    </script>
+</head>
+<body>
+</body>
+</html>

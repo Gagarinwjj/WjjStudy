@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>js模板引擎测试2</title>
+    <script>
+
+        var tpl = 'Hei, my name is <%name%>, and I\'m <%info.age%> years old.';
+        var data = {
+            "name": "Barret Lee",
+            "info": { "age": "20" }
+        };
+        var result = tpl.replace(/<%([^%>]+)?%>/g, function (match, value) {
+            console.log(match + ":" + value);
+            return data[value];
+        });
+        console.log(result);
+    </script>
+</head>
+<body>
+</body>
+</html>

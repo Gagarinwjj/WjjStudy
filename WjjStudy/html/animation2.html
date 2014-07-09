@@ -1,0 +1,268 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link href="css/animation.css" rel="stylesheet" />
+    <script src="js/jquery-1.8.3.js"></script>
+    <title>jqmobile的动画css</title>
+    <script>
+        // 让不支持CSS3 animation的浏览器向下兼容效果
+        var BROWSER = (function () {
+            var ua = navigator.userAgent.toLowerCase();
+            console.log("userAgent: " + ua);
+            var match = /(webkit)[ \/]([\w.]+)/.exec(ua) ||
+                /(opera)(?:.*version)?[ \/]([\w.]+)/.exec(ua) ||
+                /(msie) ([\w.]+)/.exec(ua) ||
+                (!/compatible/.test(ua) && /(mozilla)(?:.*? rv:([\w.]+))?/.exec(ua)) ||
+                [];
+            console.log("match: " + match);
+            return { browser: match[1] || "", version: match[2] || "0" };
+            //Chrome
+            //userAgent: mozilla/5.0 (windows nt 6.1) applewebkit/537.36 (khtml, like gecko) chrome/34.0.1847.131 safari/537.36 
+            //match: webkit/537.36, webkit, 537.36
+
+            //FireFox
+            // userAgent: mozilla/5.0 (windows nt 6.1; rv:29.0) gecko/20100101 firefox/29.0
+            //match: mozilla/5.0 (windows nt 6.1; rv:29.0,mozilla,29.0
+
+            //IE
+            //userAgent: mozilla/5.0 (compatible; msie 9.0; windows nt 6.1; trident/5.0; slcc2; .net clr 2.0.50727; .net clr 3.5.30729; .net clr 3.0.30729; media center pc 6.0; infopath.3; .net4.0c; .net4.0e) 
+            // match: msie 9.0,msie,9.0 
+
+
+            //Opera
+            //userAgent: mozilla/5.0 (windows nt 6.1) applewebkit/537.36 (khtml, like gecko) chrome/34.0.1847.132 safari/537.36 opr/21.0.1432.57 (edition campaign 49) 
+            //match: webkit/537.36,webkit,537.36 
+
+        })();
+
+        if ((BROWSER.animate = (BROWSER.browser !== "mozilla" && BROWSER.browser !== "webkit"))) {
+            // 不是目标浏览器(即为IE)，创建CSS向下兼容
+            var oStyle = document.createElement("style"), cssText = ".out{display:none!important;}";
+            oStyle.type = "text/css";
+            if (BROWSER.browser === "msie") {
+                oStyle.styleSheet.cssText = cssText;
+            } else {
+                oStyle.innerHTML = cssText;
+            }
+            console.log("oStyle: " + oStyle.styleSheet.cssText);
+            //IE下
+            // oStyle: .out {
+            //display: none !important;
+            //}
+            document.getElementsByTagName("head")[0].appendChild(oStyle);
+        }
+    </script>
+    <style>
+        *
+        {
+            margin: 0;
+            padding: 0;
+        }
+
+        body
+        {
+            font-family: 'Microsoft YaHei';
+            font-size: 18px;
+        }
+
+        .box
+        {
+            width: 660px;
+            margin: 20px auto;
+        }
+
+        .list
+        {
+            width: 220px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            float: left;
+            list-style: none;
+        }
+
+        .link
+        {
+            display: block;
+            text-align: center;
+        }
+
+        .operate
+        {
+            margin: -20px 10px 0;
+            height: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .delete
+        {
+            width: 200px;
+            line-height: 20px;
+            font-size: 12px;
+            font-family: '宋体';
+            text-align: center;
+            filter: progid:DXImageTransform.Microsoft.Gradient(startColorStr=#76000000,endColorStr=#76000000);
+            position: absolute;
+        }
+
+        :root .delete
+        {
+            filter: none; /* IE9+ remove */
+            background-color: rgba(0,0,0,.5);
+        }
+
+        .delete, .delete:hover
+        {
+            color: #fff;
+        }
+
+        .confirm
+        {
+            display: none;
+            width: 200px;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        :root .confirm:after, :root .confirm:before
+        {
+            content: '▼';
+            font-size: 24px;
+            margin-left: -12px;
+            -webkit-transform: scale(1, .5);
+            -moz-transform: scale(1, .5);
+            -ms-transform: scale(1, .5);
+            -o-transform: scale(1, .5);
+            transform: scale(1, .5);
+            position: absolute;
+            left: 50%;
+        }
+
+        .confirm:before
+        {
+            color: #bbb;
+            bottom: -22px;
+        }
+
+        .confirm:after
+        {
+            color: #fff;
+            bottom: -21px;
+        }
+
+        .confirm_body
+        {
+            padding: 0 25px;
+            border: 1px solid #bbb;
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>动画的2中方式(HTML+CSS+JS)：</h1>
+    <p>
+        1、js直接操作dom的样式属性<br />
+        2、写好动画css，js切换dom的样式
+    </p>
+
+    <ul id="box" class="box">
+        <li class="list fade">
+            <a href="#" class="link">
+                <img src="http://image.zhangxinxu.com/image/study/p/s200/ps1.jpg" /></a>
+            <p class="operate"><a href="javascript:" class="delete slideup reverse out">删除</a></p>
+        </li>
+        <li class="list fade">
+            <a href="#" class="link">
+                <img src="http://image.zhangxinxu.com/image/study/p/s200/ps2.jpg" /></a>
+            <p class="operate"><a href="javascript:" class="delete slideup reverse out">删除</a></p>
+        </li>
+        <li class="list fade">
+            <a href="#" class="link">
+                <img src="http://image.zhangxinxu.com/image/study/p/s200/ps3.jpg" /></a>
+            <p class="operate"><a href="javascript:" class="delete slideup reverse out">删除</a></p>
+        </li>
+        <li class="list fade">
+            <a href="#" class="link">
+                <img src="http://image.zhangxinxu.com/image/study/p/s200/ps4.jpg" /></a>
+            <p class="operate"><a href="javascript:" class="delete slideup reverse out">删除</a></p>
+        </li>
+        <li class="list fade">
+            <a href="#" class="link">
+                <img src="http://image.zhangxinxu.com/image/study/p/s200/ps5.jpg" /></a>
+            <p class="operate"><a href="javascript:" class="delete slideup reverse out">删除</a></p>
+        </li>
+        <li class="list fade">
+            <a href="#" class="link">
+                <img src="http://image.zhangxinxu.com/image/study/p/s200/ps6.jpg" /></a>
+            <p class="operate"><a href="javascript:" class="delete slideup reverse out">删除</a></p>
+        </li>
+    </ul>
+
+    <!-- 确定删除的提示框 -->
+    <div id="confirm" class="confirm slideup reverse out">
+        <div class="confirm_body">
+            <p>您确定删除该图片？</p>
+            <p>
+                <button id="ensure" type="button">确定</button>
+                <button id="cancel" type="button">取消</button>
+            </p>
+        </div>
+    </div>
+    <script>
+        // 删除按钮的显隐
+        $("#box .list").hover(function () {
+            // slideup显示删除按钮
+            $(this).find(".delete").removeClass("reverse out").addClass("in");
+        }, function () {
+            // slidedown隐藏删除按钮
+            $(this).find(".delete").addClass("reverse out").removeClass("in");
+        });
+
+        // 浮动提示框的元素们
+        var eleConfirm = $("#confirm"), eleEnsure = $("#ensure"), eleCancel = $("#cancel");
+        // 点击删除图片
+        $(".delete").bind("click", function () {
+            var list = $(this).parents(".list"), offset = list.offset(), self = $(this);
+            if (eleConfirm.hasClass("in")) {
+                eleConfirm.addClass("reverse out").removeClass("in");
+                self.trigger("click");//再触发一次点击，否则错位难看
+            } else {
+                eleConfirm.css({
+                    display: "block",
+                    left: offset.left + 10,
+                    top: offset.top
+                }).removeClass("reverse out").addClass("in");
+                eleEnsure.data("list", list);
+            }
+            return false;
+        });
+        // 点击确定按钮
+        eleEnsure.bind("click", function () {
+            var list = $(this).data("list");
+            // 触发取消按钮点击
+            eleCancel.trigger("click");
+            // 列表淡出
+            list.addClass("out");
+            setTimeout(function () {
+                // 200毫秒后列表删除
+                list.remove();
+            }, 200);
+            return false;
+        });
+        // 点击取消按钮
+        eleCancel.bind("click", function () {
+            eleConfirm.addClass("reverse out").removeClass("in");
+            setTimeout(function () {
+                // 200毫秒后提示框隐藏
+                eleConfirm.hide();
+            }, 200);
+            return false;
+        });
+    </script>
+</body>
+</html>

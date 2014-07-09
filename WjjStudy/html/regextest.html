@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <title>正则表达式regex.exec(str)与str.match(regex)</title>
+    <style>
+        body
+        {
+            font-family: 'Microsoft YaHei';
+            font-size: 18px;
+        }
+
+        p
+        {
+            text-indent: 2em;
+            font-size: 18px;
+            font-weight: bold;
+            border-left: solid #0026ff 8px;
+            width: 800px;
+            margin: 8px;
+        }
+
+        hr
+        {
+            margin: 10px auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>1、str.match(regex)</h1>
+    <p>match属于字符串的方法</p>
+    <p>
+        (b+)：所有匹配的b，比如bbb；(b)+：所有匹配的b的最后一个b，比如bbb的最后一个b
+        (\d+)：所有匹配的数字，比如345678；(\d)+:所有匹配的数字的最后一个，比如345678的最后一个8
+    </p>
+    <p>结论：根据返回结果可知如果<font color="red">"正则表达式"</font>有g全局,那么返回所有匹配结果[abbb345678,ab0,abbbbb6],如果<font color="red">"正则表达式"</font>没有g全局,那么仅执行一次匹配，返回数组arr[0]为匹配的完整字串,后面是括号里的捕获[abbb345678,bbb,345678];</p>
+    <script>
+        str = "abbb345678eftab0modabbbbb6";
+        var reg = /a(b+)(\d+)/i;// 继续测试: var reg = /a(b+)(\d+)/ig
+        var arr = str.match(reg);//match属于字符串的方法
+        //debugger;
+        for (var i = 0; i < arr.length; i++) {
+            document.write(i+":"+arr[i] + "<br/>");
+        }
+        function newline() {
+            document.write("<br/>");
+        }
+    </script>
+    <hr />
+
+
+    <h1>2、regex.exec(str)</h1>
+    <p>exec属于正则的方法</p>
+    <p>结论：根据返回结果可知无论<font color="red">"正则表达式"</font>是否有g全局。返回的数组arr[0]为匹配的完整字串，后面是括号里的捕获[abbb345678,bbb,345678],即g有没有都无影响,<font color="blue">都是匹配第一组数据</font>,等价于不含有g全局标志的match。</p>
+    <script type="text/javascript">
+        str = "xxabbb345678eftab0modabbbbb6";
+        var reg = /a(b+)(\d+)/i;// 继续测试: var reg = /a(b+)(\d+)/i
+        var arr = reg.exec(str);//exec属于正则的方法
+        //debugger;
+        for (var i = 0; i < arr.length; i++) {
+            document.write(i + ":" + arr[i] + "<br/>");
+        }
+    </script>
+    <hr />
+
+
+    <h1>3、g对regex.exec(str)的影响</h1>
+    <p>
+        结论：当一个具有g的<font color="red">"正则表达式"</font>调用exec()时,他将该对象的lastIndex设置到紧接这匹配子串的字符位置。当第二次调用exec时将从lastIndex所指示的字符位置开始检索.利用这个特点可以<font color="blue">反复调用exec遍历所有匹配。</font>等价于具有g标志的str.match(regex).
+    </p>
+    <script type="text/javascript">
+
+        str = "xxabbb345678eftab0modabbbbb6";
+        document.write("regex.exec法<br/>")
+        var reg = /a(b+)(\d+)/ig;// then test: var reg = /a(b+)(\d+)/i(while死循环，浏览器会死的)
+        while ((arr = reg.exec(str)) != null) {
+            document.write("arr.length=" + arr.length + "<br/>");
+            for (var i = 0; i < arr.length; i++) {
+                document.write(i + ":" + arr[i] + "<br/>");
+            }
+            newline();
+        }
+        document.write("<br/>如果只要arr[0]，相当于str.match法<br/>")
+        var arrmatch = str.match(reg);
+        document.write("arrmatch.length=" + arrmatch.length + "<br/>");
+        for (var i = 0; i < arrmatch.length; i++) {
+            document.write(i + ":" + arrmatch[i] + "<br/>");
+        }
+
+    </script>
+    <hr />
+    <h1>最终结论</h1>
+    str.match(regex)<br />
+    <ol>
+        <li>regex有g:贪婪模式，返回所有匹配</li>
+        <li>regex没有g:返回第一个匹配，及第一匹配的<font color="red">group</font></li>
+    </ol>
+    regex.exec(str)<br />
+    <ol>
+        <li>regex有g:返回第一个匹配,及第一匹配的<font color="red">group</font>
+            。重置regex的lastIndex，可以不断重复调用，直到null时结束</li>
+        <li>regex没有g:返回第一个匹配，及第一匹配的<font color="red">group</font>。</li>
+    </ol>
+    <p>regex没有g时候，str.match(regex)与regex.exec(str)等效</p>
+</body>
+</html>

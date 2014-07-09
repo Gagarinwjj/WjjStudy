@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>字符提示</title>
+    <script src="js/jquery-1.8.3.min.js"></script>
+    <script>
+        (function ($) {
+            $.fn.textRemindAuto = function (options) {
+                options = options || {};/*初始化，如果没有传递则为{}*/
+                var defaults = {
+                    blurColor: "#999",
+                    focusColor: "green",
+                    auto: true,/*是否使用默认的blurColor*/
+                    chgClass: ""/*自定义样式*/
+                };
+                var settings = $.extend({}, defaults, options);/*整合参数*/
+                //插件逻辑
+                $(this).each(function () {
+                    if (defaults.auto) {
+                        $(this).css("color", settings.blurColor);
+                    }
+                    var holdinfo = $.trim($(this).val());
+                    console.log("holdinfo:" + holdinfo);
+                    if (holdinfo) {
+                        $(this).focus(function () {
+                            if ($.trim($(this).val()) === holdinfo) {
+                                $(this).val("");
+                            }
+                            $(this).css("color", settings.focusColor);
+                            if (settings.chgClass) {
+                                $(this).toggleClass(settings.chgClass);
+                            }
+                        }).blur(function () {
+                            if ($.trim($(this).val()) === "") {
+                                $(this).val(holdinfo);
+                            }
+                            $(this).css("color", settings.blurColor);
+                            if (settings.chgClass) {
+                                $(this).toggleClass(settings.chgClass);
+                            }
+                        });
+                    }
+                });
+            };
+        })(jQuery);
+
+        $(function () {
+            $(".remindAuto").textRemindAuto();
+            $(".borderChange").textRemindAuto({ chgClass: "border" });
+            $("#textColorChg").textRemindAuto({
+                focusColor: "red"/*重写默认配置*/
+            });
+        });
+        console.log(0 == "0");//==是值相等，返回true
+        console.log(0 === "0");//===是全等于，值和类型均要相等才相等，返回false
+    </script>
+    <style>
+        .textarea
+        {
+            border: 1px solid #bbb;
+            width: 550px;
+            height: 80px;
+        }
+
+        .border
+        {
+            border: 3px solid #34538b;
+        }
+    </style>
+</head>
+<body>
+    <h4>最简单的切换</h4>
+    <p>
+        <input class="remindAuto" type="text" size="45" value="请出入姓名" />
+    </p>
+    <p>
+        <textarea class="textarea remindAuto">内容不少于300字</textarea>
+    </p>
+    <h4>外带class的切换</h4>
+    <p>
+        <textarea class="textarea borderChange">变换边框颜色</textarea>
+    </p>
+    <h4>改变显示的颜色</h4>
+    <p>
+        <input id="textColorChg" type="text" size="45" value="请输入日期..." />
+    </p>
+</body>
+</html>
