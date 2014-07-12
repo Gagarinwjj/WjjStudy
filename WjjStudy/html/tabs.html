@@ -1,0 +1,341 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>3种方式实现tab标签</title>
+
+    <style type="text/css">
+        body, div, ul, li
+        {
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        body
+        {
+            font: 12px "宋体";
+            text-align: center;
+        }
+
+
+        a:link
+        {
+            color: black;
+            text-decoration: none;
+        }
+
+
+        a:hover
+        {
+            color: #c00;
+        }
+
+        ul
+        {
+            list-style: none;
+        }
+
+
+        /*第一种形式*/
+
+        /*整体大小*/
+        #tabs0
+        {
+            height: 200px;
+            width: 400px;
+            border: 1px solid #cbcbcb;
+            background-color: #f2f6fb;
+        }
+        /*菜单区域*/
+        #menu0
+        {
+            width: 400px;
+        }
+
+            #menu0 li
+            {
+                display: block;
+                float: left;
+                padding: 4px 0;
+                width: 100px;
+                text-align: center;
+                cursor: pointer;
+                background: #FFFFff;
+            }
+
+                #menu0 li.hover
+                {
+                    background: #f2f6fb;
+                }
+        /*内容区域*/
+        #main0 ul
+        {
+            display: none;
+        }
+
+            #main0 ul.block
+            {
+                display: block;
+            }
+
+        /*第二种形式*/
+
+        /*整体大小*/
+        #tabs1
+        {
+            width: 400px;
+        }
+        /*菜单限制盒子*/
+        #menu1box
+        {
+            position: relative;
+            overflow: hidden; /*造成border-bottom消失的关键*/
+            height: 22px;
+            width: 400px;
+            text-align: center;
+        }
+        /*菜单区域*/
+        #menu1 li
+        {
+            float: left;
+            display: block;
+            cursor: pointer;
+            width: 80px;
+            text-align: center;
+            line-height: 21px;
+            height: 21px;
+        }
+
+            #menu1 li.hover
+            {
+                background: #fff;
+                border: 1px solid #333;
+            }
+        /*内容区域*/
+        #main1
+        {
+            margin-top: -1px;
+            border: 1px solid #333;
+            height: 181px;
+            width: 400px;
+            text-align: center;
+        }
+
+            #main1 ul
+            {
+                display: none;
+            }
+
+                #main1 ul.block
+                {
+                    display: block;
+                }
+
+        /*第三种形式*/
+
+        /*整体大小*/
+        #tabs2
+        {
+            height: 200px;
+            width: 400px;
+            border: 1px solid #cbcbcb;
+            background-color: #f2f6fb;
+        }
+        /*背景滑块 和 菜单区域 的容器*/
+        #menu2box
+        {
+            position: relative;
+            overflow: hidden;
+            height: 22px;
+            width: 400px;
+            text-align: left;
+            background: #FFFFff;
+        }
+        /*背景滑块*/
+        #tip2
+        {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 22px;
+            line-height: 22px;
+            width: 100px;
+            background: #f2f6fb;
+            -moz-transition: left 0.2s ease-in-out 0;
+            -o-transition: left 0.2s ease-in-out 0;
+            -webkit-transition: left 0.2s ease-in-out 0;
+            transition: left 0.2s ease-in-out 0;/*背景滑块动画*/
+        }
+        /*菜单区域*/
+        #menu2
+        {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+            #menu2 li
+            {
+                display: block;
+                float: left;
+                padding: 4px 0;
+                width: 100px;
+                text-align: center;
+                cursor: pointer;
+            }
+    </style>
+
+    <script>
+
+
+        /*第一种形式 第二种形式 更换显示样式*/
+        function setTab(m, n) {
+            //菜单
+            var lis = document.getElementById("menu" + m).getElementsByTagName("li");
+            //内容
+            var uls = document.getElementById("main" + m).getElementsByTagName("ul");
+            for (i = 0; i < lis.length; i++) {
+                lis[i].className = i == n ? "hover" : "";//是否高亮
+                uls[i].style.display = i == n ? "block" : "none";//是否显示
+            }
+        }
+
+        /*第三种形式 利用一个背景层定位*/
+
+        var m3 = { 0: "", 1: "评论内容", 2: "技术内容", 3: "点评内容" }
+        function nowtab(m, n) {
+            //将初始内容填充到 m3[0]
+            if (m3[0] == "") {
+                m3[0] = document.getElementById("main2").innerHTML;
+            }
+            document.getElementById("tip" + m).style.left = n * 100 + 'px';//背景滑块移动
+            document.getElementById("main2").innerHTML = m3[n];//设置内容
+        }
+
+    </script>
+
+</head>
+
+<body>
+
+    <br />
+
+    <br />
+
+    <!--第一种形式-->
+
+    <div id="tabs0">
+        <!--菜单区域，hover才会高亮-->
+        <ul id="menu0">
+
+            <li onclick="setTab(0,0)" class="hover">新闻</li>
+
+            <li onclick="setTab(0,1)">评论</li>
+
+            <li onclick="setTab(0,2)">技术</li>
+
+            <li onclick="setTab(0,3)">点评</li>
+
+        </ul>
+        <!--内容区域，block才会显示-->
+        <div id="main0">
+
+            <ul class="block">
+                <li>新闻列表</li>
+            </ul>
+
+            <ul>
+                <li>评论列表</li>
+            </ul>
+
+            <ul>
+                <li>技术列表</li>
+            </ul>
+
+            <ul>
+                <li>点评列表</li>
+            </ul>
+
+        </div>
+
+    </div>
+
+    <br />
+
+    <br />
+
+    <!--第二种形式-->
+
+    <div id="tabs1">
+        <!--menu1box是为了限制menu1的宽度，overflow:hidden 使得 border-bottom消失。-->
+        <div id="menu1box">
+            <!--菜单区域，hover才会高亮-->
+            <ul id="menu1">
+
+                <li class="hover" onmouseover="setTab(1,0)"><a href="#">新闻</a></li>
+
+                <li onmouseover="setTab(1,1)"><a href="#">评论</a></li>
+
+                <li onmouseover="setTab(1,2)"><a href="#">技术</a></li>
+
+                <li onmouseover="setTab(1,3)"><a href="#">点评</a></li>
+
+            </ul>
+
+        </div>
+
+        <!--内容区域，block才会显示-->
+        <div id="main1">
+
+            <ul class="block">
+                <li>新闻列表</li>
+            </ul>
+
+            <ul>
+                <li>评论列表</li>
+            </ul>
+
+            <ul>
+                <li>技术列表</li>
+            </ul>
+
+            <ul>
+                <li>点评列表</li>
+            </ul>
+
+        </div>
+    </div>
+
+    <br />
+
+    <br />
+
+    <!--第三种形式-->
+
+    <div id="tabs2">
+        <!--背景滑块 和 菜单区域 的容器-->
+        <div id="menu2box">
+            <!--背景滑块-->
+            <div id="tip2"></div>
+            <!--菜单区域，hover才会高亮-->
+            <ul id="menu2">
+
+                <li class="hover" onmouseover="nowtab(2,0)"><a href="#">新闻</a></li>
+
+                <li onmouseover="nowtab(2,1)"><a href="#">评论</a></li>
+
+                <li onmouseover="nowtab(2,2)"><a href="#">技术</a></li>
+
+                <li onmouseover="nowtab(2,3)"><a href="#">点评</a></li>
+
+            </ul>
+
+        </div>
+        <!--内容区域，由js控制其内容-->
+        <div id="main2">
+            新闻内容
+        </div>
+    </div>
+
+</body>
+</html>
